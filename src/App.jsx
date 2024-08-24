@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react'
 import Header from './components/Header'
 import TaskInput from './components/TaskInput'
 import TaskList from './components/TaskList'
+import TaskFilter from './components/TaskFilter'
 
 function App () {
   const [tasks, setTasks] = useState(() => {
     const storedTasks = localStorage.getItem('tasks')
     return storedTasks ? JSON.parse(storedTasks) : []
   })
+
+  const [filter, setFilter] = useState('all')
 
   useEffect(() => {
     console.log('Saving tasks to localStorage:', tasks)
@@ -45,12 +48,21 @@ function App () {
     )
   }
 
+  const filteredTasks = tasks.filter(task => {
+  if (filter === 'completed') return task.completed
+  if (filter === 'active') return !task.completed
+  return true
+})
+
+
   return (
     <div className='min-h-screen bg-gray-100'>
       <Header />
       <TaskInput addTask={addTask} />
+      <TaskFilter filter={filter} setFilter={setFilter} /> {/* Add filter component */}
       <TaskList
-        tasks={tasks}
+        // tasks={tasks}
+        tasks = { filteredTasks }
         toggleComplete={toggleComplete}
         deleteTask={deleteTask}
         updateTask={updateTask}
