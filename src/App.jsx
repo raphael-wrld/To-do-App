@@ -1,13 +1,32 @@
-import React, { useState } from 'react'
+// App.jsx
+import React, { useState, useEffect } from 'react'
 import Header from './components/Header'
 import TaskInput from './components/TaskInput'
 import TaskList from './components/TaskList'
-// import { v4 as uuidv4 } from 'uuid';
-function App () {
-  const [tasks, setTasks] = useState([])
 
-  const addTask = task => {
-    setTasks([...tasks, { id: Date.now(), text: task, completed: false }])
+function App () {
+  const [tasks, setTasks] = useState(() => {
+    const storedTasks = localStorage.getItem('tasks')
+    return storedTasks ? JSON.parse(storedTasks) : []
+  })
+
+  // Save tasks to localStorage whenever the tasks state changes
+  useEffect(() => {
+    console.log('Saving tasks to localStorage:', tasks)
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+  }, [tasks])
+
+  const addTask = taskText => {
+    const newTask = {
+      id: Date.now(),
+      text: taskText,
+      completed: false
+    }
+    setTasks(prevTasks => {
+      const updatedTasks = [...prevTasks, newTask]
+      console.log('Updated tasks:', updatedTasks)
+      return updatedTasks
+    })
   }
 
   const toggleComplete = id => {
