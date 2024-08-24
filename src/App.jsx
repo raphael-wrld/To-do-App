@@ -1,4 +1,3 @@
-// App.jsx
 import React, { useState, useEffect } from 'react'
 import Header from './components/Header'
 import TaskInput from './components/TaskInput'
@@ -10,7 +9,6 @@ function App () {
     return storedTasks ? JSON.parse(storedTasks) : []
   })
 
-  // Save tasks to localStorage whenever the tasks state changes
   useEffect(() => {
     console.log('Saving tasks to localStorage:', tasks)
     localStorage.setItem('tasks', JSON.stringify(tasks))
@@ -41,6 +39,12 @@ function App () {
     setTasks(tasks.filter(task => task.id !== id))
   }
 
+  const updateTask = (id, newText) => {
+    setTasks(
+      tasks.map(task => (task.id === id ? { ...task, text: newText } : task))
+    )
+  }
+
   return (
     <div className='min-h-screen bg-gray-100'>
       <Header />
@@ -49,6 +53,7 @@ function App () {
         tasks={tasks}
         toggleComplete={toggleComplete}
         deleteTask={deleteTask}
+        updateTask={updateTask}
       />
     </div>
   )

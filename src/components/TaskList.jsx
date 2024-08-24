@@ -3,14 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TaskItem from './TaskItem'
 
-/**
- * Component to display a list of tasks
- * @param {Object} props
- * @param {Array} props.tasks - tasks to display
- * @param {Function} props.toggleComplete - callback to toggle task completion
- * @param {Function} props.deleteTask - callback to delete a task
- */
-function TaskList ({ tasks, toggleComplete, deleteTask }) {
+function TaskList ({ tasks, toggleComplete, deleteTask,updateTask }) {
   console.log('Rendering TaskList with tasks:', tasks)
 
   return (
@@ -21,7 +14,8 @@ function TaskList ({ tasks, toggleComplete, deleteTask }) {
             key={task.id}
             task={task}
             toggleComplete={toggleComplete}
-            deleteTask={deleteTask}
+                deleteTask={deleteTask}
+                updateTask={updateTask}
           />
         ))
       ) : (
@@ -40,8 +34,8 @@ TaskList.propTypes = {
     })
   ).isRequired,
   toggleComplete: PropTypes.func.isRequired,
-  deleteTask: PropTypes.func.isRequired
+    deleteTask: PropTypes.func.isRequired,
+  updateTask: PropTypes.func.isRequired,
 }
 
 export default TaskList
-
