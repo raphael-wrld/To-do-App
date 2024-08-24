@@ -17,18 +17,16 @@ function TaskInput({ addTask }) {
   };
 
   return (
-  <form onSubmit={handleSubmit} className='p-4 flex flex-col items-center'>
+  <form onSubmit={handleSubmit} className='p-4 flex justify-center flex-wrap'>
     <div className='flex'>
       <input
         type='text'
         value={task}
-        onChange={e => setTask(e.target.value)}
-        className={`border p-2 rounded-l-lg w-full max-w-xs ${
-          error ? 'border-red-500' : 'border-gray-300'
-        }`}
-        placeholder='Enter a new task'
-      />
-      <button type='submit' className='bg-blue-600 text-white p-2 rounded-r-lg'>
+        onChange={(e) => setTask(e.target.value)}
+    className="border border-gray-300 p-2 rounded-l-lg w-full sm:w-auto max-w-xs"
+    placeholder="Enter a new task"
+  />
+      <button type='submit' className='bg-blue-600 text-white p-2 rounded-r-lg mt-2 sm:mt-0'>
         Add Task
       </button>
     </div>

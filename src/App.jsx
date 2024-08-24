@@ -56,7 +56,8 @@ function App () {
 
 
   return (
-    <div className='min-h-screen bg-gray-100'>
+    <div className='min-h-screen bg-gray-100 flex justify-center items-center px-4'>
+      <div className = 'w-full max-w-md'>
       <Header />
       <TaskInput addTask={addTask} />
       <TaskFilter filter={filter} setFilter={setFilter} /> {/* Add filter component */}
@@ -67,7 +68,8 @@ function App () {
         deleteTask={deleteTask}
         updateTask={updateTask}
       />
-    </div>
+      </div>
+      </div>
   )
 }
 
