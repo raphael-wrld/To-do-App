@@ -1,19 +1,17 @@
+// TaskItem.jsx
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { FiEdit2, FiTrash2, FiSave, FiX } from 'react-icons/fi' // Use icons for actions
 
 function TaskItem ({ task, toggleComplete, deleteTask, updateTask }) {
   const [isEditing, setIsEditing] = useState(false)
   const [editTaskText, setEditTaskText] = useState(task.text)
 
-  const handleEdit = () => {
-    setIsEditing(true)
-  }
-
+  const handleEdit = () => setIsEditing(true)
   const handleSave = () => {
     updateTask(task.id, editTaskText)
     setIsEditing(false)
   }
-
   const handleCancel = () => {
     setIsEditing(false)
     setEditTaskText(task.text)
@@ -21,8 +19,8 @@ function TaskItem ({ task, toggleComplete, deleteTask, updateTask }) {
 
   return (
     <div
-      className={`flex items-center justify-between p-2 my-2 border rounded ${
-        task.completed ? 'bg-green-200' : 'bg-white'
+      className={`flex items-center justify-between p-3 my-2 border rounded-md shadow-sm transition ${
+        task.completed ? 'bg-green-100' : 'bg-white'
       }`}
     >
       {isEditing ? (
@@ -34,10 +32,10 @@ function TaskItem ({ task, toggleComplete, deleteTask, updateTask }) {
             className='border p-2 rounded w-full mr-2'
           />
           <button onClick={handleSave} className='text-green-500 mr-2'>
-            Save
+            <FiSave />
           </button>
           <button onClick={handleCancel} className='text-gray-500'>
-            Cancel
+            <FiX />
           </button>
         </div>
       ) : (
@@ -54,12 +52,12 @@ function TaskItem ({ task, toggleComplete, deleteTask, updateTask }) {
         </div>
       )}
       {!isEditing && (
-        <div>
+        <div className='flex'>
           <button onClick={handleEdit} className='text-blue-500 mr-2'>
-            Edit
+            <FiEdit2 />
           </button>
           <button onClick={() => deleteTask(task.id)} className='text-red-500'>
-            Delete
+            <FiTrash2 />
           </button>
         </div>
       )}

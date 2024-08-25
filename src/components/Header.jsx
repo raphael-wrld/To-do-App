@@ -1,9 +1,10 @@
-// import React from 'react'
+// Header.jsx
+import React from 'react'
 
 function Header () {
   return (
-    <header className='bg-blue-600 text-white p-4 text-center'>
-      <h1 className='text-2xl font-bold'>My To-Do List</h1>
+    <header className='bg-gradient-to-r from-blue-500 to-teal-500 text-white py-4 text-center shadow-md'>
+      <h1 className='text-4xl font-semibold tracking-wide'>My To-Do List</h1>
     </header>
   )
 }

@@ -11,9 +11,9 @@ function App () {
   })
 
   const [filter, setFilter] = useState('all')
+  const [sortOption, setSortOption] = useState('dateNewest') // Add sorting state
 
   useEffect(() => {
-    console.log('Saving tasks to localStorage:', tasks)
     localStorage.setItem('tasks', JSON.stringify(tasks))
   }, [tasks])
 
@@ -23,11 +23,7 @@ function App () {
       text: taskText,
       completed: false
     }
-    setTasks(prevTasks => {
-      const updatedTasks = [...prevTasks, newTask]
-      console.log('Updated tasks:', updatedTasks)
-      return updatedTasks
-    })
+    setTasks(prevTasks => [...prevTasks, newTask])
   }
 
   const toggleComplete = id => {
@@ -48,28 +44,59 @@ function App () {
     )
   }
 
+  // Filter tasks based on the filter option
   const filteredTasks = tasks.filter(task => {
-  if (filter === 'completed') return task.completed
-  if (filter === 'active') return !task.completed
-  return true
-})
+    if (filter === 'completed') return task.completed
+    if (filter === 'active') return !task.completed
+    return true
+  })
 
+  // Sort tasks based on the sorting option
+  const sortedTasks = filteredTasks.sort((a, b) => {
+    if (sortOption === 'dateNewest') {
+      return b.id - a.id
+    } else if (sortOption === 'dateOldest') {
+      return a.id - b.id
+    } else if (sortOption === 'alphaAZ') {
+      return a.text.localeCompare(b.text)
+    } else if (sortOption === 'alphaZA') {
+      return b.text.localeCompare(a.text)
+    } else if (sortOption === 'completedFirst') {
+      return b.completed - a.completed
+    } else if (sortOption === 'activeFirst') {
+      return a.completed - b.completed
+    }
+    return 0
+  })
 
   return (
-    <div className='min-h-screen bg-gray-100 flex justify-center items-center px-4'>
-      <div className = 'w-full max-w-md'>
+    <div className='min-h-screen bg-gray-100 flex flex-col items-center px-4'>
       <Header />
-      <TaskInput addTask={addTask} />
-      <TaskFilter filter={filter} setFilter={setFilter} /> {/* Add filter component */}
-      <TaskList
-        // tasks={tasks}
-        tasks = { filteredTasks }
-        toggleComplete={toggleComplete}
-        deleteTask={deleteTask}
-        updateTask={updateTask}
-      />
+      <div className='w-full max-w-lg mt-6 bg-white rounded-lg shadow-md p-6'>
+        <TaskInput addTask={addTask} />
+        <TaskFilter filter={filter} setFilter={setFilter} />
+        <div className='flex justify-center mb-4'>
+          <select
+            value={sortOption}
+            onChange={e => setSortOption(e.target.value)}
+            className='p-2 border rounded sort-dropdown'
+          >
+            <option value='dateNewest'>Newest First</option>
+            <option value='dateOldest'>Oldest First</option>
+            <option value='alphaAZ'>A-Z</option>
+            <option value='alphaZA'>Z-A</option>
+            <option value='completedFirst'>Completed First</option>
+            <option value='activeFirst'>Active First</option>
+          </select>
+        </div>
+        <TaskList
+          tasks={sortedTasks}
+          toggleComplete={toggleComplete}
+          deleteTask={deleteTask}
+          updateTask={updateTask}
+        />
       </div>
-      </div>
+    </div>
   )
 }
 

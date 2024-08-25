@@ -1,7 +1,6 @@
-//TaksInput.jsx
+// TaskInput.jsx
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-
 
 function TaskInput ({ addTask }) {
   const [task, setTask] = useState('')
@@ -11,45 +10,37 @@ function TaskInput ({ addTask }) {
     e.preventDefault()
     if (task.trim()) {
       addTask(task)
-      setTask('') // Clear the input field
-      setError(null) // Clear error
+      setTask('')
+      setError(null)
     } else {
       setError('Task cannot be empty')
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className='p-4 flex justify-center flex-wrap'>
-      <div className='flex flex-col'>
-        <label htmlFor='taskInput' className='sr-only'>
-          Enter a new task
-        </label>
-        <div className='flex'>
+    <form onSubmit={handleSubmit} className='p-4 flex justify-center'>
+      <div className='flex flex-col w-full max-w-md'>
+        <div className='flex items-center rounded-lg overflow-hidden'>
           <input
-            id='taskInput'
             type='text'
             value={task}
             onChange={e => setTask(e.target.value)}
-            className='border border-gray-300 p-2 rounded-l-lg w-full sm:w-auto max-w-xs'
+            className='flex-grow border border-gray-300 p-3 rounded-l-md'
             placeholder='Enter a new task'
-            aria-describedby={error ? 'taskError' : undefined}
           />
           <button
             type='submit'
-            className='bg-blue-600 text-white p-2 rounded-r-lg mt-2 sm:mt-0'
+            className='bg-blue-600 text-white p-3 rounded-r-md transition hover:bg-blue-700'
           >
-            Add Task
+            Add
           </button>
         </div>
-        {error && (
-          <p id='taskError' className='text-red-500 mt-2'>
-            {error}
-          </p>
-        )}
+        {error && <p className='text-red-500 mt-2'>{error}</p>}
       </div>
     </form>
   )
 }
+
 TaskInput.propTypes = {
   addTask: PropTypes.func.isRequired
 }
