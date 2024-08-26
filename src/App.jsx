@@ -17,11 +17,12 @@ function App () {
     localStorage.setItem('tasks', JSON.stringify(tasks))
   }, [tasks])
 
-  const addTask = taskText => {
+  const addTask = (taskText, priority) => {
     const newTask = {
       id: Date.now(),
       text: taskText,
-      completed: false
+      completed: false,
+      priority, // Include priority
     }
     setTasks(prevTasks => [...prevTasks, newTask])
   }

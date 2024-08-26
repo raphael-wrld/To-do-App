@@ -17,6 +17,12 @@ function TaskItem ({ task, toggleComplete, deleteTask, updateTask }) {
     setEditTaskText(task.text)
   }
 
+const priorityColor = {
+  High: 'text-red-500',
+  Medium: 'text-yellow-500',
+  Low: 'text-green-500'
+}[task.priority]
+
   return (
     <div
       className={`flex items-center justify-between p-3 my-2 border rounded-md shadow-sm transition ${
@@ -48,7 +54,8 @@ function TaskItem ({ task, toggleComplete, deleteTask, updateTask }) {
           />
           <span className={task.completed ? 'line-through text-gray-500' : ''}>
             {task.text}
-          </span>
+            </span>
+            ;<span className={`${priorityColor} ml-2`}>{task.priority}</span>
         </div>
       )}
       {!isEditing && (
@@ -69,11 +76,13 @@ TaskItem.propTypes = {
   task: PropTypes.shape({
     id: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired
+    completed: PropTypes.bool.isRequired,
+    priority: PropTypes.string.isRequired // Add this line
   }).isRequired,
   toggleComplete: PropTypes.func.isRequired,
   deleteTask: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired
 }
+
 
 export default TaskItem
