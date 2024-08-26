@@ -3,117 +3,45 @@ import Header from './components/Header'
 import TaskInput from './components/TaskInput'
 import TaskList from './components/TaskList'
 import TaskFilter from './components/TaskFilter'
-import {
-  collection,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc
-} from 'firebase/firestore'
-import { db } from './firebaseConfig' // Import Firestore instance
 
 function App () {
-  // const [tasks, setTasks] = useState(() => {
-  //   const storedTasks = localStorage.getItem('tasks')
-  //   return storedTasks ? JSON.parse(storedTasks) : []
-  // })
-
-  const [tasks, setTasks] = useState([])
-
+  const [tasks, setTasks] = useState(() => {
+    const storedTasks = localStorage.getItem('tasks')
+    return storedTasks ? JSON.parse(storedTasks) : []
+  })
 
   const [filter, setFilter] = useState('all')
   const [sortOption, setSortOption] = useState('dateNewest') // Add sorting state
 
-  // useEffect(() => {
-  //   localStorage.setItem('tasks', JSON.stringify(tasks))
-  // }, [tasks])
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+  }, [tasks])
 
-  // Fetch tasks from Firestore
-useEffect(() => {
-  const fetchTasks = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, 'tasks'))
-      const tasksFromFirestore = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }))
-      setTasks(tasksFromFirestore)
-    } catch (error) {
-      console.error('Error fetching tasks from Firestore:', error)
-      // Fallback to LocalStorage if Firestore fails
-      const storedTasks = localStorage.getItem('tasks')
-      setTasks(storedTasks ? JSON.parse(storedTasks) : [])
-    }
-  }
-  fetchTasks()
-}, [])
-
-// Sync tasks to LocalStorage and Firestore
-useEffect(() => {
-  localStorage.setItem('tasks', JSON.stringify(tasks))
-}, [tasks])
-
-  const addTask = async taskText => {
+  const addTask = taskText => {
     const newTask = {
       id: Date.now(),
       text: taskText,
       completed: false
     }
-   try {
-  const docRef = await addDoc(collection(db, 'tasks'), newTask)
-  setTasks(prevTasks => [...prevTasks, { id: docRef.id, ...newTask }])
-} catch (error) {
-  console.error('Error adding task to Firestore:', error)
-}
-
+    setTasks(prevTasks => [...prevTasks, newTask])
   }
 
-  const toggleComplete = async id => {
-    // setTasks(
-    //   tasks.map(task =>
-    //     task.id === id ? { ...task, completed: !task.completed } : task
-    //   )
-    // )
-    try {
-      const taskRef = doc(db, 'tasks', id);
-      const updatedTask = tasks.find(task => task.id === id);
-      await updateDoc(taskRef, { completed: !updatedTask.completed });
-      setTasks(
-        tasks.map(task =>
-          task.id === id ? { ...task, completed: !task.completed } : task
-        )
-      );
-    } catch (error) {
-      console.error("Error updating task in Firestore:", error);
-    }
+  const toggleComplete = id => {
+    setTasks(
+      tasks.map(task =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    )
   }
 
-  const deleteTask = async id => {
-    // setTasks(tasks.filter(task => task.id !== id))
-    try {
-  await deleteDoc(doc(db, 'tasks', id))
-  setTasks(tasks.filter(task => task.id !== id))
-} catch (error) {
-  console.error('Error deleting task from Firestore:', error)
-}
-
+  const deleteTask = id => {
+    setTasks(tasks.filter(task => task.id !== id))
   }
 
-  const updateTask = async (id, newText) => {
-    // setTasks(
-    //   tasks.map(task => (task.id === id ? { ...task, text: newText } : task))
-    // )
-    try {
-  const taskRef = doc(db, 'tasks', id)
-  await updateDoc(taskRef, { text: newText })
-  setTasks(
-    tasks.map(task => (task.id === id ? { ...task, text: newText } : task))
-  )
-} catch (error) {
-  console.error('Error updating task in Firestore:', error)
-}
-
+  const updateTask = (id, newText) => {
+    setTasks(
+      tasks.map(task => (task.id === id ? { ...task, text: newText } : task))
+    )
   }
 
   // Filter tasks based on the filter option
