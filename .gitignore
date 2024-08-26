@@ -17,6 +17,7 @@ Thumbs.db
 # Visual Studio Code
 .vscode/
 .vscode/*
+.idx
 
 # Temporary files
 *.tmp
